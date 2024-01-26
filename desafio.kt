@@ -1,21 +1,34 @@
-// [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
-
+package main
 enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
 
-class Usuario
+class Usuario(val nome: String, val email: String)
 
 data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>, val nivel: Nivel) {
 
-    val inscritos = mutableListOf<Usuario>()
+    val inscritos = mutableSetOf<Usuario>()
     
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun matricular(usuario: Usuario) : String {
+
+        return if (inscritos.add(usuario)) {
+            "${usuario.nome} matriculado com sucesso em $nome!"
+        } else {
+            "${usuario.nome} já é aluno desta formação ($nome)!"
+        }
+    }
+    fun cancelarMatricula(usuario: Usuario): String {
+        return if (inscritos.remove(usuario)) {
+            "${usuario.nome} cancelou sua matricula em $nome!"
+        } else {
+            "${usuario.nome} não está matriculado em ($nome) !"
+        }
+    }
+
+    fun montarRelatorio() : String {
+        return  "---------------------------------------------------------------------------\n" +
+                "Formação:               $nome - Nível: $nivel \n " +
+               "Usuários matriculados: " + inscritos.joinToString(separator = "\n\t\t\t\t") { usuario -> usuario.nome }
     }
 }
 
-fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
-}
